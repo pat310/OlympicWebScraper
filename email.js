@@ -1,12 +1,12 @@
 // var ticketOffering = require('/server.js');
-ticketOffering = ["basketball", "football"];
+// ticketOffering = ["basketball", "football", "baseball"];
 //require node JS filesystem API
 var fs = require('fs');
 //require ejs NPM
 var ejs = require('ejs');
 
 
-function send(){
+var send = function (ticketOffering){
 	//read user file and send to parsing function
 	var csvFile = fs.readFileSync("email.csv","utf8");
 	var csv_data = csvParse(csvFile);
@@ -103,6 +103,8 @@ function send(){
 		return emailTemplate;
 
 	}
-}
+};
 
-send();
+// send();
+
+module.exports = send;

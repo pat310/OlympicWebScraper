@@ -2,12 +2,11 @@
   <head><meta charset='utf-8'></head>
   <body>
     <p>Hey there <%= firstName %>,</p>
-    <br>
     <p>
     The following sports have changed their ticket offering:
     <ul>
       <% for(var i =0; i<ticketOffering.length; i++) {%>
-      <li><% = ticketOffering[i] %></li>
+      <li><%= ticketOffering[i] %></li>
       <% } %>
     </ul>
     </p>
