@@ -30,7 +30,7 @@ var send = function (ticketOffering){
 		var subject = csv_data[i].firstName + ", ticket offerings have changed";
 		var message_html = emailTemplate[i];
 		console.log(message_html);
-		// sendEmail(to_name, to_email, from_name, from_email, subject, message_html);
+		sendEmail(to_name, to_email, from_name, from_email, subject, message_html);
 	}
 
 	function sendEmail(to_name, to_email, from_name, from_email, subject, message_html){
@@ -94,10 +94,26 @@ var send = function (ticketOffering){
 		//send ejs.render() method email template and user object containing first name and number of months since last contact
 		//also send latest post href and title
 		//do for each user 
+		var eventNames = [];
+		var eventLinks = [];
+		var eventDate = [];
+		var counter = 0;
+		for(var key in ticketOffering){
+			eventNames.push(key);
+			eventLinks.push(ticketOffering[key]);
+			eventDate.push([]);
+			for(var i = 0; i<ticketOffering[key].length; i++){
+				var stringPos = ticketOffering[key][i].search(/EventDate=/);
+				eventDate[counter].push(ticketOffering[key][i].slice(stringPos+10));
+			}
+			counter++;
+		}
 		for(var i = 0; i<users.length; i++){
 			emailTemplate[i] = ejs.render(template, {
 			    firstName: users[i].firstName,
-			    ticketOffering: ticketOffering
+			    eventNames: eventNames,
+			    eventLinks: eventLinks,
+			    eventDate: eventDate
 			    });
 		}
 		return emailTemplate;

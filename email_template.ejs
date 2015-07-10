@@ -3,12 +3,14 @@
   <body>
     <p>Hey there <%= firstName %>,</p>
     <p>
-    The following sports have changed their ticket offering:
-    <ul>
-      <% for(var i =0; i<ticketOffering.length; i++) {%>
-      <li><%= ticketOffering[i] %></li>
+    The following sports have changed their ticket offering:<br>
+      <% for(var i =0; i<eventNames.length; i++) {%><b><%= eventNames[i] %></b>
+      <ul>
+        <% for(var j =0; j<eventLinks[i].length; j++) {%>
+        <li><a href="<%= eventLinks[i][j] %>"><%= eventDate[i][j] %></a></li>
+        <% } %>
+      </ul>
       <% } %>
-    </ul>
     </p>
     <p>
       Talk soon,<br>

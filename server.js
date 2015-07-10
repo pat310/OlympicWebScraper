@@ -37,8 +37,8 @@ function ticketSave(html){
 		}
 	});
 	if(change){
-		console.log(ticketOffering);
-		// send(ticketOffering);
+		// console.log(ticketOffering);
+		send(ticketOffering);
 	}else console.log("No change this time");
 }
 
