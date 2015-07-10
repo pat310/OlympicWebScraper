@@ -27,9 +27,9 @@ var send = function (ticketOffering){
 		var to_email = csv_data[i].emailAddress;
 		var from_name = "Patrick Trasborg";
 		var from_email = "patrick.trasborg@gmail.com";
-		var subject = csv_data[i].firstName + ", ticket offerings have changed";
+		var subject = "olympic ticket offerings have changed";
 		var message_html = emailTemplate[i];
-		console.log(message_html);
+		console.log("Message sent to ", to_name);
 		sendEmail(to_name, to_email, from_name, from_email, subject, message_html);
 	}
 

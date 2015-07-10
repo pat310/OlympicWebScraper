@@ -16,17 +16,16 @@ setInterval(function(){
 		if(err) return console.log(err);
 		count++;
 	});
-}, 10000);
+}, 60000*5);
 
-var ticketOffering = {};
 function ticketSave(html){
+	var ticketOffering = {};
 	$ = cheerio.load(html);
 	var change = false;
-	ticketOffering = [];
 	$('tbody').children('tr').children('td').children('b').children('a').each(function(i, elem){
 		var eventNames = $(this).parentsUntil('tr').children('td').children('a');
 		var numberEvents = eventNames.length;
-		if(events[$(this).text()] !== numberEvents || !events[$(this).text()]){
+		if(!events[$(this).text()] || events[$(this).text()] !== numberEvents){
 			events[$(this).text()] = numberEvents;
 			change = true;
 			var name = $(this).text();
@@ -37,9 +36,6 @@ function ticketSave(html){
 		}
 	});
 	if(change){
-		// console.log(ticketOffering);
 		send(ticketOffering);
 	}else console.log("No change this time");
 }
-
-// module.exports = ticketOffering;
