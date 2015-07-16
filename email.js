@@ -1,5 +1,3 @@
-// var ticketOffering = require('/server.js');
-// ticketOffering = ["basketball", "football", "baseball"];
 //require node JS filesystem API
 var fs = require('fs');
 //require ejs NPM

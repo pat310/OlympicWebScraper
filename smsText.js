@@ -27,5 +27,4 @@ var sendText = function(body){
 	}
 };
 
-// sendText("this is the body")
 module.exports = sendText;
