@@ -3,8 +3,7 @@ var specialEvents = [
 'Swimming', 
 'Gymnastics - Artistic', 
 'Volleyball - Beach',
-'Diving',
-'Basketball'
+'Diving'
 ];
 
 module.exports = specialEvents;
