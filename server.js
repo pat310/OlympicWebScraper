@@ -18,7 +18,7 @@ setInterval(function(){
 		if(err) return console.log(err);
 		count++;
 	});
-}, 60000*5);
+}, 10000);
 
 function ticketSave(html){
 	try{	
@@ -27,7 +27,6 @@ function ticketSave(html){
 		var change = false;
 		var textNumber = [];
 
-		if(!$('tbody').children('tr').children('td').children('b').children('a')) return;
 		$('tbody').children('tr').children('td').children('b').children('a').each(function(i, elem){
 			var exists = [];
 			var eventNames = $(this).parentsUntil('tr').children('td').children('a');
@@ -51,6 +50,7 @@ function ticketSave(html){
 				});
 			}
 		});
+
 		if(change && count>1){
 			// console.log(ticketOffering);
 			send(ticketOffering);
