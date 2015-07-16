@@ -5,18 +5,18 @@ var fs = require('fs');
 //require ejs NPM
 var ejs = require('ejs');
 
+var mandrillApiKey = require('./api.js').mandrillApiKey;
+var emailAdd = require('./api.js').emailAdd;
+
+var csv_data = require('./users.js');
 
 var send = function (ticketOffering){
-	//read user file and send to parsing function
-	var csvFile = fs.readFileSync("email.csv","utf8");
-	var csv_data = csvParse(csvFile);
-
 
 	//using mandrill email api
 	//makes mandrill javascript api available
 	var mandrill = require('mandrill-api/mandrill');
 	//instantiates mandrill api and makes its functions available
-	var mandrill_client = new mandrill.Mandrill('f1WTLIyGtATaHkfg9C36CQ');
+	var mandrill_client = new mandrill.Mandrill(mandrillApiKey);
 	//read in ejs email template and send to ejsTemplate function for replacing
 	var template = fs.readFileSync('email_template.ejs','utf-8');
 	var emailTemplate = ejsTemplate(template,csv_data);
@@ -25,8 +25,8 @@ var send = function (ticketOffering){
 	for(var i = 0; i<csv_data.length; i++){
 		var to_name = csv_data[i].firstName + " " + csv_data[i].lastName;
 		var to_email = csv_data[i].emailAddress;
-		var from_name = "Patrick Trasborg";
-		var from_email = "patrick.trasborg@gmail.com";
+		var from_name = "Ticket Change No Reply";
+		var from_email = emailAdd;
 		var subject = "olympic ticket offerings have changed";
 		var message_html = emailTemplate[i];
 		console.log("Message sent to ", to_name);
@@ -49,7 +49,7 @@ var send = function (ticketOffering){
 	        "preserve_recipients": true,
 	        "merge": false,
 	        "tags": [
-	            "Fullstack_Tumblrmailer_Workshop"
+	            "OlympicTicketWebScraper"
 	        ]    
 	    };
 	    var async = false;
@@ -62,31 +62,6 @@ var send = function (ticketOffering){
 	        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
 	        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
 	    });
-	}
-
-
-	function csvParse(csvFile){
-		//split data at new lines (note there is one extra \n line at the end to remove)
-		csvFile = csvFile.split("\n");
-		var headers = csvFile.slice(0,1).toString().split(",");
-		var userData = csvFile.slice(1,csvFile.length-1);
-
-		//build user constructor function
-		var userConstructor = function(array){
-			for(var i = 0; i < headers.length; i++){
-				this[headers[i]] = array[i];
-			}
-		};
-
-		var users = [];
-		//loop over number of users
-		for(var i = 0; i < userData.length; i++){
-			//split each user into separate fields
-			var curUser = userData[i].toString().split(",");
-			//pass fields into constructor function to construct user object for each user
-			users[i] = new userConstructor(curUser);
-		}
-		return users;
 	}
 
 	function ejsTemplate(template,users){
@@ -120,7 +95,5 @@ var send = function (ticketOffering){
 
 	}
 };
-
-// send();
 
 module.exports = send;
