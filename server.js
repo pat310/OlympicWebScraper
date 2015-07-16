@@ -18,7 +18,7 @@ setInterval(function(){
 		if(err) return console.log(err);
 		count++;
 	});
-}, 10000);
+}, 60000*5);
 
 function ticketSave(html){
 	try{	
