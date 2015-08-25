@@ -3,6 +3,7 @@ var cheerio = require('cheerio');
 var send = require('./email.js');
 var sendText = require('./smsText.js');
 var specialEvents = require('./eventList.js');
+var onlyEvents = require('./onlyEvents.js');
 
 url = "https://www.cosport.com/olympics/tickets.aspx";
 
@@ -18,7 +19,7 @@ setInterval(function(){
 		if(err) return console.log(err);
 		count++;
 	});
-}, 60000*5);
+}, 10000);
 
 function ticketSave(html){
 	try{	
@@ -31,23 +32,25 @@ function ticketSave(html){
 			var exists = [];
 			var eventNames = $(this).parentsUntil('tr').children('td').children('a');
 			var numberEvents = eventNames.length;
-			if(!events[$(this).text()] || events[$(this).text()] !== numberEvents){
-				events[$(this).text()] = numberEvents;
-				change = true;
+			if(onlyEvents.indexOf($(this).text().trim()) !== -1){
+				if(!events[$(this).text()] || events[$(this).text()] !== numberEvents){
+					events[$(this).text()] = numberEvents;
+					change = true;
 
-				var thisEvent = $(this).text().trim();
-				exists = specialEvents.filter(function(value){
-				    return value === thisEvent;
-				});
+					var thisEvent = $(this).text().trim();
+					exists = specialEvents.filter(function(value){
+					    return value === thisEvent;
+					});
 
-				if(exists.length>0){
-					textNumber.push(thisEvent);
-				} 
-				var name = $(this).text();
-				ticketOffering[name] = [];
-				eventNames.each(function(i, elem){
-					ticketOffering[name].push("https://www.cosport.com" + $(this).attr('href'));
-				});
+					if(exists.length>0){
+						textNumber.push(thisEvent);
+					} 
+					var name = $(this).text();
+					ticketOffering[name] = [];
+					eventNames.each(function(i, elem){
+						ticketOffering[name].push("https://www.cosport.com" + $(this).attr('href'));
+					});
+				}
 			}
 		});
 
