@@ -1,8 +1,7 @@
 var specialEvents = [
 'Opening Ceremony', 
 'Swimming', 
-'Gymnastics - Artistic', 
-'Volleyball - Beach',
+'Gymnastics - Artistic',
 'Diving',
 'Athletics',
 'Cycling Track',
