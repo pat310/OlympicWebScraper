@@ -3,18 +3,14 @@ var fs = require('fs');
 //require ejs NPM
 var ejs = require('ejs');
 
-var mandrillApiKey = require('./api.js').mandrillApiKey;
+var mailgunApiKey = require('./api.js').mailgunApiKey;
 var emailAdd = require('./api.js').emailAdd;
+var rp = require('request-promise');
 
 var csv_data = require('./users.js');
 
 var send = function (ticketOffering){
 
-	//using mandrill email api
-	//makes mandrill javascript api available
-	var mandrill = require('mandrill-api/mandrill');
-	//instantiates mandrill api and makes its functions available
-	var mandrill_client = new mandrill.Mandrill(mandrillApiKey);
 	//read in ejs email template and send to ejsTemplate function for replacing
 	var template = fs.readFileSync('email_template.ejs','utf-8');
 	var emailTemplate = ejsTemplate(template,csv_data);
@@ -23,43 +19,36 @@ var send = function (ticketOffering){
 	for(var i = 0; i<csv_data.length; i++){
 		var to_name = csv_data[i].firstName + " " + csv_data[i].lastName;
 		var to_email = csv_data[i].emailAddress;
-		var from_name = "Ticket Change No Reply";
 		var from_email = emailAdd;
 		var subject = "olympic ticket offerings have changed";
 		var message_html = emailTemplate[i];
 		console.log("Message sent to ", to_name);
-		sendEmail(to_name, to_email, from_name, from_email, subject, message_html);
+		sendEmail(to_name, to_email, from_email, subject, message_html);
 	}
 
-	function sendEmail(to_name, to_email, from_name, from_email, subject, message_html){
-	    var message = {
-	        "html": message_html,
-	        "subject": subject,
-	        "from_email": from_email,
-	        "from_name": from_name,
-	        "to": [{
-	                "email": to_email,
-	                "name": to_name
-	            }],
-	        "important": false,
-	        "track_opens": true,    
-	        "auto_html": false,
-	        "preserve_recipients": true,
-	        "merge": false,
-	        "tags": [
-	            "OlympicTicketWebScraper"
-	        ]    
-	    };
-	    var async = false;
-	    var ip_pool = "Main Pool";
-	    mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool}, function(result) {
-	        // console.log(message);
-	        // console.log(result);   
-	    }, function(e) {
-	        // Mandrill returns the error as an object with name and message keys
-	        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-	        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-	    });
+	function sendEmail(to_name, to_email, from_email, subject, message_html){
+		var options = {
+			method: 'POST',
+			uri: 'https://api.mailgun.net/v3/trasb.org/messages',
+			headers: {
+				Authorization: 'Basic YXBpOmtleS1iODgzOTMxOGU0ZjJlMGExM2RjZjhkYjM3ZDQwYzY3NQ==',
+				api: mailgunApiKey
+			},
+			form: {
+				from: from_email,
+				to: to_name + '<' + to_email + '>',
+				subject: subject,
+				html: message_html
+			}
+		};
+
+		rp(options)
+		.then(function(){
+			console.log('email sent!');
+		})
+		.catch(function(err){
+			console.log('there was an err', err);
+		});
 	}
 
 	function ejsTemplate(template,users){
