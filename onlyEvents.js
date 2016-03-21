@@ -4,8 +4,7 @@ var specialEvents = [
 'Gymnastics - Artistic',
 'Diving',
 'Athletics',
-'Cycling Track',
-'Football'
+'Cycling Track'
 ];
 
 module.exports = specialEvents;
