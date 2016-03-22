@@ -1,4 +1,3 @@
-//require node JS filesystem API
 var fs = require('fs');
 var ejs = require('ejs');
 
