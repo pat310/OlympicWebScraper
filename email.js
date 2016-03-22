@@ -1,6 +1,5 @@
 //require node JS filesystem API
 var fs = require('fs');
-//require ejs NPM
 var ejs = require('ejs');
 
 var mailgunApiKey = require('./api.js').mailgunApiKey;
